@@ -20,13 +20,16 @@ export function Nav({ count, activeSection }: NavProps) {
           <nav className="flex items-center gap-1">
             <Link
               href="/"
-              className={`text-sm px-2.5 py-1 rounded-md transition-colors ${
+              className={`flex items-center gap-1.5 text-sm px-2.5 py-1 rounded-md transition-colors ${
                 activeSection === "releases" || !activeSection
                   ? "text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-800 font-medium"
                   : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
               }`}
             >
               Releases
+              <span className="text-[9px] font-bold px-1 py-px rounded bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 ring-1 ring-inset ring-amber-200 dark:ring-amber-700 leading-tight">
+                WIP
+              </span>
             </Link>
             <Link
               href="/docs"
