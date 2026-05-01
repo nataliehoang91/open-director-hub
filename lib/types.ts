@@ -1,7 +1,6 @@
 export type ReleaseStatus = "deployed" | "rollback" | "failed";
 export type ReleaseEnvironment = "production" | "staging" | "preview";
 
-// DB-backed release record — populated automatically via Vercel webhook (coming soon)
 export interface Release {
   id: number;
   version: string;
@@ -9,9 +8,29 @@ export interface Release {
   title: string;
   description: string | null;
   status: ReleaseStatus;
-  commit_sha: string | null;
-  commit_msg: string | null;
   deployed_by: string | null;
-  deployed_at: string;   // ISO string from DB timestamptz
+  deployed_at: string;
   created_at: string;
+}
+
+export interface ReleasePR {
+  id: number;
+  release_id: number;
+  service: "fe" | "be";
+  pr_number: number;
+  pr_title: string;
+  pr_url: string;
+  pr_author: string;
+}
+
+export interface ReleaseDetail extends Release {
+  fe_commit: string | null;
+  fe_commit_url: string | null;
+  fe_vercel_url: string | null;
+  fe_status: ReleaseStatus | null;
+  be_commit: string | null;
+  be_commit_url: string | null;
+  be_actions_url: string | null;
+  be_status: ReleaseStatus | null;
+  prs: ReleasePR[];
 }
