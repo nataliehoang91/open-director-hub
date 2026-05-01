@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Globe, Box, Layers, ScrollText, GitPullRequest, ExternalLink, CheckCircle2, XCircle, RotateCcw, GitCommit } from "lucide-react";
+import { Globe, Box, Layers, ScrollText, FileText, GitPullRequest, ExternalLink, CheckCircle2, XCircle, RotateCcw, GitCommit } from "lucide-react";
 import { STATUS_CONFIG } from "@/components/release-card";
 import type { ReleaseDetail, ReleasePR, ReleaseStatus } from "@/lib/types";
 
@@ -86,18 +86,21 @@ function ServiceSection({ label, icon, status, commit, commitUrl, deployUrl, dep
 }
 
 export function ReleaseDetailTabs({ release }: { release: ReleaseDetail }) {
-  const [tab, setTab] = useState<"deployment" | "changelog">("deployment");
+  const [tab, setTab] = useState<"deployment" | "changelog" | "notes">("deployment");
   const fePRs = release.prs.filter(p => p.service === "fe");
   const bePRs = release.prs.filter(p => p.service === "be");
+
+  const TABS = [
+    { key: "deployment" as const, label: "Deployment",    icon: <Layers className="h-3.5 w-3.5" /> },
+    { key: "changelog"  as const, label: "Changelog",     icon: <ScrollText className="h-3.5 w-3.5" />, count: release.prs.length },
+    { key: "notes"      as const, label: "Release Notes", icon: <FileText className="h-3.5 w-3.5" /> },
+  ];
 
   return (
     <>
       {/* Tabs */}
       <div className="flex items-center gap-1 mb-5">
-        {([
-          { key: "deployment", label: "Deployment", icon: <Layers className="h-3.5 w-3.5" /> },
-          { key: "changelog",  label: "Changelog",  icon: <ScrollText className="h-3.5 w-3.5" />, count: release.prs.length },
-        ] as const).map(t => (
+        {TABS.map(t => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
@@ -129,15 +132,9 @@ export function ReleaseDetailTabs({ release }: { release: ReleaseDetail }) {
         </div>
       )}
 
-      {/* Changelog tab */}
+      {/* Changelog tab — PRs only */}
       {tab === "changelog" && (
         <div className="space-y-6">
-          {release.description && (
-            <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-5 py-4">
-              <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2">Release notes</p>
-              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{release.description}</p>
-            </div>
-          )}
           {fePRs.length > 0 && (
             <div>
               <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2 flex items-center gap-2">
@@ -158,9 +155,29 @@ export function ReleaseDetailTabs({ release }: { release: ReleaseDetail }) {
               </div>
             </div>
           )}
-          {fePRs.length === 0 && bePRs.length === 0 && !release.description && (
+          {fePRs.length === 0 && bePRs.length === 0 && (
             <p className="text-sm text-slate-400 dark:text-slate-600 italic text-center py-8">
-              No changelog entries yet.
+              No pull requests recorded for this release.
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Release Notes tab */}
+      {tab === "notes" && (
+        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-5">
+          {release.description ? (
+            <>
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">
+                Feature notes — {release.version}
+              </p>
+              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+                {release.description}
+              </p>
+            </>
+          ) : (
+            <p className="text-sm text-slate-400 dark:text-slate-600 italic text-center py-6">
+              No release notes for this version yet.
             </p>
           )}
         </div>
