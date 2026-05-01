@@ -1,35 +1,17 @@
-export type DeployStatus = "success" | "failed" | "in_progress" | "pending";
+export type ReleaseStatus = "deployed" | "rollback" | "failed";
+export type ReleaseEnvironment = "production" | "staging" | "preview";
 
-export interface PullRequest {
-  number: number;
-  title: string;
-  url: string;
-  author: string;
-}
-
-export interface FEDeployment {
-  status: DeployStatus;
-  vercel_url: string | null;       // preview / prod URL
-  commit: string;                  // git SHA (short)
-  commit_url: string;
-  prs: PullRequest[];
-}
-
-export interface BEDeployment {
-  status: DeployStatus;
-  actions_url: string | null;      // GitHub Actions run URL (added later)
-  commit: string;
-  commit_url: string;
-  prs: PullRequest[];
-}
-
+// DB-backed release record — populated automatically via Vercel webhook (coming soon)
 export interface Release {
-  id: string;
-  version: string;                 // e.g. v1.2.3
-  environment: "staging" | "production";
-  deployed_at: string;             // ISO date string
-  deployed_by: string;
-  fe: FEDeployment;
-  be: BEDeployment;
-  notes: string | null;            // optional release notes
+  id: number;
+  version: string;
+  environment: ReleaseEnvironment;
+  title: string;
+  description: string | null;
+  status: ReleaseStatus;
+  commit_sha: string | null;
+  commit_msg: string | null;
+  deployed_by: string | null;
+  deployed_at: string;   // ISO string from DB timestamptz
+  created_at: string;
 }

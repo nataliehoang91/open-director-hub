@@ -46,7 +46,7 @@ export default async function HomePage() {
             <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
           </div>
           {production.length === 0 ? (
-            <p className="text-sm text-slate-400 italic">No production releases yet.</p>
+            <p className="text-sm text-slate-400 dark:text-slate-600 italic">No production releases yet.</p>
           ) : (
             <div className="space-y-4">
               {production.map((release) => (
