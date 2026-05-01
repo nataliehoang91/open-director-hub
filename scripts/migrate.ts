@@ -15,7 +15,7 @@ async function migrate() {
   // Core releases table
   await sql`
     CREATE TABLE IF NOT EXISTS releases (
-      id            SERIAL PRIMARY KEY,
+      id            UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
       version       VARCHAR(50)  NOT NULL,
       environment   VARCHAR(20)  NOT NULL CHECK (environment IN ('production', 'staging', 'preview')),
       title         TEXT         NOT NULL,
@@ -42,8 +42,8 @@ async function migrate() {
   // PRs table — multiple FE/BE PRs per release
   await sql`
     CREATE TABLE IF NOT EXISTS release_prs (
-      id          SERIAL PRIMARY KEY,
-      release_id  INTEGER      NOT NULL REFERENCES releases(id) ON DELETE CASCADE,
+      id          UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
+      release_id  UUID         NOT NULL REFERENCES releases(id) ON DELETE CASCADE,
       service     VARCHAR(5)   NOT NULL CHECK (service IN ('fe', 'be')),
       pr_number   INTEGER      NOT NULL,
       pr_title    TEXT         NOT NULL,

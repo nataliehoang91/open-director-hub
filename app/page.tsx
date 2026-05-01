@@ -50,7 +50,7 @@ export default async function HomePage() {
           ) : (
             <div className="space-y-4">
               {production.map((release) => (
-                <ReleaseCard key={release.id} release={release} />
+                <ReleaseCard key={release.id} release={release} prs={release.prs} />
               ))}
             </div>
           )}
@@ -67,7 +67,7 @@ export default async function HomePage() {
             </div>
             <div className="space-y-4">
               {staging.map((release) => (
-                <ReleaseCard key={release.id} release={release} />
+                <ReleaseCard key={release.id} release={release} prs={release.prs} />
               ))}
             </div>
           </section>

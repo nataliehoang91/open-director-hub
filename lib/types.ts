@@ -2,7 +2,7 @@ export type ReleaseStatus = "deployed" | "rollback" | "failed";
 export type ReleaseEnvironment = "production" | "staging" | "preview";
 
 export interface Release {
-  id: number;
+  id: string;  // UUID
   version: string;
   environment: ReleaseEnvironment;
   title: string;
@@ -14,8 +14,8 @@ export interface Release {
 }
 
 export interface ReleasePR {
-  id: number;
-  release_id: number;
+  id: string;
+  release_id: string;
   service: "fe" | "be";
   pr_number: number;
   pr_title: string;
