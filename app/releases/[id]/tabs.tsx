@@ -111,7 +111,7 @@ export function ReleaseDetailTabs({ release }: { release: ReleaseDetail }) {
             }`}
           >
             {t.icon}{t.label}
-            {"count" in t && t.count > 0 && (
+            {"count" in t && (t.count ?? 0) > 0 && (
               <span className="ml-1 text-[10px] font-bold px-1.5 py-px rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
                 {t.count}
               </span>
